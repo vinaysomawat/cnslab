@@ -1,31 +1,78 @@
 // mpz program for moduler arithmatic with random inputs.
 
-#include<stdio.h>
 #include<gmp.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<math.h>
 
 int main() 
 {
-	//generate random number
-	mpz_t rand_Num;
+
+	mpz_t a,b,n,t1,t2,t3,r1,r2;
+	mpz_inits(a,b,n,t1,t2,t3,r1,r2,NULL);
 	gmp_randstate_t state;
+	gmp_randinit_mt(state);
 
-	mpz_init(rand_Num);
-	gmp_randinit_default(state);
+	unsigned long seed;
 
-	unsigned long int max, seed;
 	seed = time(NULL);
+	gmp_randseed_ui(state,seed);
+	int bits=10;
 
-	//random state seeding
-	gmp_randseed_ui(state, seed);
+	mpz_rrandomb(a,state,bits);
+	mpz_rrandomb(b,state,bits);
+	mpz_rrandomb(n,state,bits);
 
+	gmp_printf("\na is: %Zd \nb is: %Zd \n n is: %Zd \n",a,b,n);
 
-	mpz_set_ui(max,100000);
-	mpz_urandomb(rand_Num,state,max);
+	//addition 
+	//((amodn)+(bmodn))modn= ((a+b)modn)
+	gmp_printf("Addition:\n\n");
+	mpz_fdiv_r(t1,a,n);
+	mpz_fdiv_r(t2,b,n);
+	mpz_add(t3,t1,t2);
+	mpz_fdiv_r(r1,t3,n);
+	gmp_printf("((amodn)+(bmodn))modn is: %Zd \n",r1);
 
-	gmp_printf("%Zd\n", rand_Num);
+	mpz_add(t1,a,b);
+	mpz_fdiv_r(r2,t1,n);
+	gmp_printf("((a+b)modn) is: %Zd \n",r2);
 
-	//free all memory
-	gmp_randclear(state);
-    mpz_clear(rand_Num);
+	if(mpz_cmp(r1,r2)==0)
+		gmp_printf("So ((amodn)+(bmodn))modn)) = ((a+b)modn)\n\n\n");
+
+	//substraction 
+	//((amodn)-(bmodn))modn= ((a-b)modn)
+	gmp_printf("Substraction:\n\n");
+	mpz_fdiv_r(t1,a,n);
+	mpz_fdiv_r(t2,b,n);
+	mpz_sub(t3,t1,t2);
+	mpz_fdiv_r(r1,t3,n);
+	gmp_printf("((amodn)-(bmodn))modn is: %Zd \n",r1);
+
+	mpz_sub(t1,a,b);
+	mpz_fdiv_r(r2,t1,n);
+	gmp_printf("((a-b)modn) is: %Zd \n",r2);
+
+	if(mpz_cmp(r1,r2)==0)
+		gmp_printf("So ((amodn)-(bmodn))modn) = ((a-b)modn)\n\n\n");
+
+	//multiplication 
+	//((amodn)*(bmodn))modn= ((a*b)modn)
+	gmp_printf("Multiplication:\n\n");
+	mpz_fdiv_r(t1,a,n);
+	mpz_fdiv_r(t2,b,n);
+	mpz_mul(t3,t1,t2);
+	mpz_fdiv_r(r1,t3,n);
+	gmp_printf("((amodn)*(bmodn))modn is: %Zd \n",r1);
+
+	mpz_mul(t1,a,b);
+	mpz_fdiv_r(r2,t1,n);
+	gmp_printf("((a*b)modn) is: %Zd \n",r2);
+
+	if(mpz_cmp(r1,r2)==0)
+		gmp_printf("So ((amodn)*(bmodn))modn) = ((a*b)modn)\n\n");
+
 	return 0;
 }
