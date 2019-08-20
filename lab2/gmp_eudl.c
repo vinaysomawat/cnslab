@@ -1,40 +1,52 @@
+//extended eclidean algorithm
+
+
 #include<gmp.h>
 
-void gcdExtended(mpz_t a, mpz_t b, mpz_t x, mpz_t y)
-{
-	if(a==0)
-	{
-		x =0;
-		y=1;
-		return b;
-	}
-	mpz_t x1,y1;
-
-	mpz_t gcd = gcdExtended(b%a,a,x1,y1);
-
-	x=y1 - (b/a)*x1;
-	y=x1;
-
-	return gcd;
-}
-
-void main()
-{
+int main() {
+	mpz_t a,b,d,e,x1,x2,y1,y2,r,x,y,q,t;
+	mpz_inits(a,b,d,e,x1,x2,y1,y2,r,x,y,q,t,NULL);
+	gmp_printf("a:");
+	gmp_scanf("%Zd",&a);
+	gmp_printf("b:");
+	gmp_scanf("%Zd",&b);
 	
-	//decalartion of variables
-	mpz_t a,b,d;
+	if(mpz_cmp_ui(b,0)==0)
+	{
+		mpz_set(d,a);
+		mpz_set_ui(x,1);
+		mpz_set_ui(y,0);
+	}
+	else
+	{
+		mpz_set_ui(x2,1);
+		mpz_set_ui(x1,0);
+		mpz_set_ui(y1,1);
+		mpz_set_ui(y2,0);
 
-	//initializing variables
-	mpz_inits(a,b,d,NULL);
-	gmp_printf("insert integer a:");
-	gmp_scanf("%Zd",a);
-	gmp_printf("Insert integer b:");
-	gmp_scanf("%Zd",b);
+		while(mpz_cmp_ui(b,0)>0)
+		{
+			mpz_fdiv_q(q,a,b);
+			mpz_mul(e,q,b);
+			mpz_sub(r,a,e);
+			mpz_mul(e,q,x1);
+			mpz_sub(a,x2,e);
+			mpz_mul(e,q,y1);
+			mpz_sub(y,y2,e);
 
-	d = gcdExtended(a,b,&x, &y);
+			mpz_set(a,b);
+			mpz_set(b,r);
+			mpz_set(x2,x1);
+			mpz_set(x1,x);
+			mpz_set(y2,y1);
+			mpz_set(y1,y);
+		}
 
-	gmp_printf("gcd(%Zd, %Zd) = %Zd",a,b,d);
+		mpz_set(d,a);
+		mpz_set(x,x2);
+		mpz_set(y,y2);
+	}
 
+	gmp_printf("gcd is: %Zd \n x is: %Zd \n y is: %Zd \n",d,x,y);
 	return 0;
-
 }
