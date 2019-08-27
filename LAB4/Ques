@@ -1,0 +1,7 @@
+1. Generate GF(p^n) using two methods.
+2. Find GCD of two polynomials.
+3. Modular Arithmatic of GF(2^n)
+	a. a(x)+b(x) mode m(x)
+	b. a(x)-b(x) mode m(x)
+	c. a(x)*b(x) mode m(x)
+	d. a(x)*b(x)^-1 mode m(x)

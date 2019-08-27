@@ -12,12 +12,7 @@ void main(){
 	gmp_printf("Insert integer b:");
 	gmp_scanf("%Zd",b);
 
-	while(mpz_cmp_ui(b,0)!=0)
-	{
-		mpz_set(c,b);
-		mpz_mod(c,a,b);
-		mpz_set(c,a);
-	}
+	mpz_gcd(c,a,b);
 
 	gmp_printf("\nGCD of a & b:%Zd", c);
 
